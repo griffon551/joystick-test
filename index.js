@@ -412,6 +412,11 @@ class JoystickClient {
       this.ws.close();
     }
   }
+
+  getFirstChannel() {
+    const channels = Array.from(this.connectedChannels.keys());
+    return channels.length > 0 ? channels[0] : null;
+  }
 }
 
 // Streamer.bot WebSocket Client
