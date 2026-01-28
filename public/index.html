@@ -497,7 +497,9 @@
                     joystickDot.className = 'status-dot disconnected';
                     joystickText.textContent = 'Disconnected';
                 }
-                joystickChannel.textContent = `Channel: ${data.joystick.channelId || 'N/A'}`;
+                
+                const channelId = data.joystick.channelId || 'N/A';
+                joystickChannel.textContent = `Channel: ${channelId}`;
 
                 // Streamer.bot status
                 const sbDot = document.getElementById('streamerbot-status');
