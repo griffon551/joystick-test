@@ -153,6 +153,20 @@ Use the "HTTP Request" sub-action in Streamer.bot:
 **Method 2: Custom Event**  
 Trigger a custom event named `JoystickTV_SendMessage` with a `message` argument.
 
+### Sending Whispers from Streamer.bot
+
+> **Requires the `SendWhisper` permission** on your Joystick.TV bot application. This permission cannot be added after the bot is created — if it's missing, you'll need to recreate the bot application with it enabled and redo the OAuth setup.
+
+**Method 1: HTTP API** (Recommended)  
+Use the "HTTP Request" sub-action in Streamer.bot:
+- URL: `http://localhost:3000/chat/whisper`
+- Method: `POST`
+- Body: `{"username": "someuser", "message": "Your private message"}`
+- Headers: `Content-Type: application/json`
+
+**Method 2: Custom Event**  
+Trigger a custom event named `JoystickTV_SendWhisper` with `username` and `message` arguments.
+
 ## API Endpoints
 
 - `GET /health` — Health check and uptime
@@ -162,6 +176,10 @@ Trigger a custom event named `JoystickTV_SendMessage` with a `message` argument.
 - `POST /chat/send` — Send a chat message to Joystick.TV
   ```json
   { "message": "Hello from Streamer.bot!" }
+  ```
+- `POST /chat/whisper` — Send a private whisper to a specific user (requires `SendWhisper` permission)
+  ```json
+  { "username": "someuser", "message": "this is a secret" }
   ```
 - `GET /api/stream-settings` — Fetch current stream settings (title, welcome message, etc.)
 - `POST /api/stream-settings` — Update stream settings (any combination of fields)
