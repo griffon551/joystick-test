@@ -88,7 +88,14 @@ No need to manually update files!
 In Streamer.bot, create actions with these **exact** names:
 
 1. **JoystickTV_ChatMessage**
-   - Variables: `user`, `message`, `userId`, `messageId`, `channelId`, `platform`
+   - Variables: `user`, `nickname`, `message`, `userId`, `messageId`, `channelId`, `isMod`, `isSubscriber`, `isStreamer`, `isStaff`, `isHost`, `isBot`, `isNew`, `subscriptionTier`, `subscriptionMonths`, `platform`
+   - `isMod` — `true` if the sender is a moderator
+   - `isSubscriber` — `true` if the sender is a subscriber
+   - `isStreamer` — `true` if the sender is the channel owner/streamer
+   - `isStaff` — `true` if the sender is Joystick.TV staff
+   - `isHost` — `true` if the sender is a host
+   - `isBot` — `true` if the sender is a bot
+   - `isNew` — `true` if the sender is a new user
 
 2. **JoystickTV_Tip**
    - Variables: `user`, `amount`, `menuItem`, `channelId`, `platform`
