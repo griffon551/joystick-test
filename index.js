@@ -207,6 +207,15 @@ class JoystickClient {
 
     if (message.type === 'confirm_subscription') {
       logger.info('✓ Successfully subscribed to GatewayChannel');
+      // Seed connectedChannels from token store so we can send messages
+      // before any events have arrived from Joystick.TV
+      const knownChannels = Object.keys(tokenManager.tokens);
+      for (const ch of knownChannels) {
+        if (!this.connectedChannels.has(ch)) {
+          this.connectedChannels.set(ch, true);
+          logger.info(`Pre-seeded channel from token store: ${ch}`);
+        }
+      }
       return;
     }
 
