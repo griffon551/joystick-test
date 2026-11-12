@@ -630,7 +630,8 @@ class JoystickClient {
       data: JSON.stringify({
         action: 'send_message',
         text: message,
-        channel_id: channelId
+        channel_id: channelId,
+        channelId: channelId
       })
     };
 
@@ -672,7 +673,8 @@ class JoystickClient {
         action: 'send_whisper',
         username: username,
         text: message,
-        channel_id: channelId
+        channel_id: channelId,
+        channelId: channelId
       })
     };
 
