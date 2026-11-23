@@ -122,6 +122,14 @@ const logger = {
 };
 
 // Joystick.TV WebSocket Client
+// Stores last 3 raw v2 messages per event type for debug panel
+const recentEvents = {};
+function recordRawEvent(type, msg) {
+  if (!recentEvents[type]) recentEvents[type] = [];
+  recentEvents[type].unshift({ receivedAt: new Date().toISOString(), payload: msg });
+  if (recentEvents[type].length > 3) recentEvents[type].length = 3;
+}
+
 class JoystickClient {
   constructor() {
     this.ws = null;
@@ -207,15 +215,6 @@ class JoystickClient {
 
     if (message.type === 'confirm_subscription') {
       logger.info('✓ Successfully subscribed to GatewayChannel');
-      // Seed connectedChannels from token store so we can send messages
-      // before any events have arrived from Joystick.TV
-      const knownChannels = Object.keys(tokenManager.tokens);
-      for (const ch of knownChannels) {
-        if (!this.connectedChannels.has(ch)) {
-          this.connectedChannels.set(ch, true);
-          logger.info(`Pre-seeded channel from token store: ${ch}`);
-        }
-      }
       return;
     }
 
@@ -263,26 +262,19 @@ class JoystickClient {
     const occurredAt = msg.occurred_at;
     const data = msg.data || {};
 
+    recordRawEvent(type, msg);
+
     switch (type) {
       case 'new_message': {
         const badges = data.author?.badges || {};
-        const subscription = data.subscription || {};
         const args = {
           user: data.author?.username || 'Unknown',
-          nickname: data.author?.nickname || data.author?.username || 'Unknown',
           message: data.text || '',
           userId: data.author?.username || '',
           messageId: msg.id,
           channelId,
           isMod: badges.mod || false,
           isSubscriber: badges.subscriber || false,
-          isStreamer: badges.streamer || false,
-          isStaff: badges.staff || false,
-          isHost: badges.host || false,
-          isBot: badges.bot || false,
-          isNew: badges.new || false,
-          subscriptionTier: subscription.tier || '',
-          subscriptionMonths: subscription.months || 0,
           platform: 'joystick'
         };
         logger.info(`Chat from ${args.user}: ${args.message}`);
@@ -622,18 +614,15 @@ class JoystickClient {
     }
 
     // Action Cable message format for sending messages
-    // identifier must match the subscribe identifier exactly
     const payload = {
       command: 'message',
       identifier: JSON.stringify({
-        channel: 'GatewayChannel',
-        event_version: 'v2'
+        channel: 'GatewayChannel'
       }),
       data: JSON.stringify({
         action: 'send_message',
         text: message,
-        channel_id: channelId,
-        channelId: channelId
+        channel_id: channelId
       })
     };
 
@@ -666,19 +655,16 @@ class JoystickClient {
     }
 
     // Action Cable message format for sending whispers
-    // identifier must match the subscribe identifier exactly
     const payload = {
       command: 'message',
       identifier: JSON.stringify({
-        channel: 'GatewayChannel',
-        event_version: 'v2'
+        channel: 'GatewayChannel'
       }),
       data: JSON.stringify({
         action: 'send_whisper',
         username: username,
         text: message,
-        channel_id: channelId,
-        channelId: channelId
+        channel_id: channelId
       })
     };
 
@@ -1319,6 +1305,10 @@ async function getAccessToken() {
 
   return tokenManager.getToken(channelId).accessToken;
 }
+
+app.get('/api/recent-events', (req, res) => {
+  res.json(recentEvents);
+});
 
 app.get('/api/stream-settings', async (req, res) => {
   try {
