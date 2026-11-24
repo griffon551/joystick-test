@@ -319,23 +319,26 @@ class JoystickClient {
         break;
       }
 
+      case 'started':
       case 'stream_started': {
-        const args = { timestamp: occurredAt, channelId, platform: 'joystick' };
-        logger.info('Stream started');
+        const args = { user: data.who || '', timestamp: occurredAt, channelId, platform: 'joystick' };
+        logger.info(`Stream started (${args.user})`);
         streamerBotClient.triggerEvent('JoystickTV_StreamStarted', args);
         break;
       }
 
+      case 'ended':
       case 'stream_ended':
       case 'stream_ending': {
-        const args = { timestamp: occurredAt, channelId, platform: 'joystick' };
+        const args = { user: data.who || '', timestamp: occurredAt, channelId, platform: 'joystick' };
         logger.info('Stream ended');
         streamerBotClient.triggerEvent('JoystickTV_StreamEnded', args);
         break;
       }
 
+      case 'resuming':
       case 'stream_resuming': {
-        const args = { timestamp: occurredAt, channelId, platform: 'joystick' };
+        const args = { user: data.who || '', timestamp: occurredAt, channelId, platform: 'joystick' };
         logger.info('Stream resuming soon');
         streamerBotClient.triggerEvent('JoystickTV_StreamResuming', args);
         break;
@@ -367,6 +370,7 @@ class JoystickClient {
         break;
       }
 
+      case 'dropped_in':
       case 'stream_dropped_in': {
         const args = {
           streamer: data.who || 'Unknown',
