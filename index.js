@@ -618,10 +618,12 @@ class JoystickClient {
     }
 
     // Action Cable message format for sending messages
+    // identifier must match the subscribe identifier exactly
     const payload = {
       command: 'message',
       identifier: JSON.stringify({
-        channel: 'GatewayChannel'
+        channel: 'GatewayChannel',
+        event_version: 'v2'
       }),
       data: JSON.stringify({
         action: 'send_message',
@@ -659,10 +661,12 @@ class JoystickClient {
     }
 
     // Action Cable message format for sending whispers
+    // identifier must match the subscribe identifier exactly
     const payload = {
       command: 'message',
       identifier: JSON.stringify({
-        channel: 'GatewayChannel'
+        channel: 'GatewayChannel',
+        event_version: 'v2'
       }),
       data: JSON.stringify({
         action: 'send_whisper',
