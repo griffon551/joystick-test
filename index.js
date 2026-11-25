@@ -375,11 +375,25 @@ class JoystickClient {
         const args = {
           streamer: data.who || 'Unknown',
           viewers: data.number_of_viewers || data.viewer_count || data.viewers || 0,
+          text: msg.text || '',
           channelId,
           platform: 'joystick'
         };
         logger.info(`${args.streamer} dropped in with ${args.viewers} viewers`);
         streamerBotClient.triggerEvent('JoystickTV_DropIn', args);
+        break;
+      }
+
+      case 'milestone_completed': {
+        const args = {
+          user: data.who || 'Unknown',
+          title: data.title || '',
+          amount: data.amount || 0,
+          channelId,
+          platform: 'joystick'
+        };
+        logger.info(`Milestone completed: ${args.title} by ${args.user} (${args.amount})`);
+        streamerBotClient.triggerEvent('JoystickTV_MilestoneCompleted', args);
         break;
       }
 
