@@ -822,7 +822,8 @@ class StreamerBotClient {
       'JoystickTV_TipGoalMet',
       'JoystickTV_SubscriberOnlyStarted',
       'JoystickTV_UserEntered',
-      'JoystickTV_UserLeft'
+      'JoystickTV_UserLeft',
+      'JoystickTV_MilestoneCompleted'
     ];
 
     const missingActions = requiredActions.filter(
