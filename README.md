@@ -88,14 +88,9 @@ No need to manually update files!
 In Streamer.bot, create actions with these **exact** names:
 
 1. **JoystickTV_ChatMessage**
-   - Variables: `user`, `nickname`, `message`, `userId`, `messageId`, `channelId`, `isMod`, `isSubscriber`, `isStreamer`, `isStaff`, `isHost`, `isBot`, `isNew`, `subscriptionTier`, `subscriptionMonths`, `platform`
-   - `isMod` — `true` if the sender is a moderator
+   - Variables: `user`, `message`, `userId`, `messageId`, `channelId`, `isMod`, `isSubscriber`, `platform`
+   - `isMod` — `true` if the sender has moderator status
    - `isSubscriber` — `true` if the sender is a subscriber
-   - `isStreamer` — `true` if the sender is the channel owner/streamer
-   - `isStaff` — `true` if the sender is Joystick.TV staff
-   - `isHost` — `true` if the sender is a host
-   - `isBot` — `true` if the sender is a bot
-   - `isNew` — `true` if the sender is a new user
 
 2. **JoystickTV_Tip**
    - Variables: `user`, `amount`, `menuItem`, `channelId`, `platform`
@@ -119,7 +114,8 @@ In Streamer.bot, create actions with these **exact** names:
    - Variables: `user`, `tier`, `giftCount`, `channelId`, `platform`
 
 9. **JoystickTV_DropIn**
-   - Variables: `streamer`, `viewers`, `channelId`, `platform`
+   - Variables: `streamer`, `viewers`, `text`, `channelId`, `platform`
+   - `text` — the full drop-in announcement text (e.g. "LiatDrazil and friends dropped in!")
 
 10. **JoystickTV_StreamResuming**
     - Variables: `timestamp`, `channelId`, `platform`
@@ -140,6 +136,12 @@ In Streamer.bot, create actions with these **exact** names:
 
 15. **JoystickTV_UserLeft**
     - Variables: `user`, `channelId`, `platform`
+
+16. **JoystickTV_MilestoneCompleted**
+    - Variables: `user`, `title`, `amount`, `channelId`, `platform`
+    - `user` — who triggered the milestone
+    - `title` — the milestone name
+    - `amount` — the milestone target amount
 
 ### Example Action Setup
 
