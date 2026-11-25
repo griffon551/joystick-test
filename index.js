@@ -1297,17 +1297,33 @@ app.post('/api/test/stream-resuming', (req, res) => {
 });
 
 app.post('/api/test/drop-in', (req, res) => {
-  const { streamer, viewers } = req.body;
-  
+  const { streamer, viewers, text } = req.body;
+
   const args = {
     streamer: streamer || 'TestStreamer',
     viewers: viewers || 25,
+    text: text || `${streamer || 'TestStreamer'} and friends dropped in!`,
     platform: 'joystick_test'
   };
-  
+
   streamerBotClient.triggerEvent('JoystickTV_DropIn', args);
   logger.info(`Test trigger: ${args.streamer} dropped in with ${args.viewers} viewers`);
   res.json({ success: true, event: 'JoystickTV_DropIn', args });
+});
+
+app.post('/api/test/milestone', (req, res) => {
+  const { user, title, amount } = req.body;
+
+  const args = {
+    user: user || 'TestUser',
+    title: title || 'Test Milestone',
+    amount: amount || 2000,
+    platform: 'joystick_test'
+  };
+
+  streamerBotClient.triggerEvent('JoystickTV_MilestoneCompleted', args);
+  logger.info(`Test trigger: Milestone "${args.title}" completed by ${args.user}`);
+  res.json({ success: true, event: 'JoystickTV_MilestoneCompleted', args });
 });
 
 // Helper: get a valid access token for the first connected channel, refreshing if needed
