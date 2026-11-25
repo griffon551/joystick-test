@@ -461,7 +461,29 @@
                         <label>Viewers Brought</label>
                         <input type="number" id="dropin-viewers" value="25" placeholder="Viewer count">
                     </div>
+                    <div class="form-group">
+                        <label>Announcement Text</label>
+                        <input type="text" id="dropin-text" placeholder="Leave blank to auto-generate">
+                    </div>
                     <button onclick="testDropIn()">Test Drop-In</button>
+                </div>
+
+                <!-- Milestone Test -->
+                <div class="test-card">
+                    <h3>🏆 Milestone Completed</h3>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="milestone-user" value="TestUser" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Milestone Title</label>
+                        <input type="text" id="milestone-title" value="Test Milestone" placeholder="Milestone name">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" id="milestone-amount" value="2000" placeholder="Amount">
+                    </div>
+                    <button onclick="testMilestone()">Test Milestone</button>
                 </div>
 
                 <!-- Stream Events -->
@@ -874,16 +896,37 @@
         async function testDropIn() {
             const streamer = document.getElementById('dropin-streamer').value;
             const viewers = parseInt(document.getElementById('dropin-viewers').value);
-            
+            const text = document.getElementById('dropin-text').value.trim();
+
             try {
                 const response = await fetch('/api/test/drop-in', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ streamer, viewers })
+                    body: JSON.stringify({ streamer, viewers, text: text || undefined })
                 });
-                
+
                 if (response.ok) {
                     showAlert(`✓ Triggered drop-in: ${streamer} brought ${viewers} viewers`, 'success');
+                }
+            } catch (error) {
+                showAlert('Failed to trigger event', 'error');
+            }
+        }
+
+        async function testMilestone() {
+            const user = document.getElementById('milestone-user').value;
+            const title = document.getElementById('milestone-title').value;
+            const amount = parseInt(document.getElementById('milestone-amount').value);
+
+            try {
+                const response = await fetch('/api/test/milestone', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user, title, amount })
+                });
+
+                if (response.ok) {
+                    showAlert(`✓ Triggered milestone: "${title}" by ${user}`, 'success');
                 }
             } catch (error) {
                 showAlert('Failed to trigger event', 'error');
